@@ -1,21 +1,28 @@
 #!/usr/bin/python3
-"""script that takes in an argument and displays all values in the
-states table of hbtn_0e_0_usa where name matches the argument
-and it is safe from MySQL injections"""
-import MySQLdb
-import sys
+"""
+A script (safe from MySQL injections)
+that displays all values in the states
+table of the database `hbtn_0e_0_usa`,
+where `name` matches the argument passed
+to it at run time
+"""
 
+import MySQLdb as db
+from sys import argv
 
 if __name__ == '__main__':
+    """
+    connect to the database and fetch all data
+    from the 'states' table
+    """
+    conn = db.connect(host="localhost", port=3306,
+                      user=argv[1], passwd=argv[2], db=argv[3])
+    cursor = conn.cursor()
 
-    db = MySQLdb.connect(host="localhost", port=3306,
-                         user=sys.argv[1], passwd=sys.argv[2],
-                         db=sys.argv[3], charset="utf8")
-    cr = db.cursor()
-    myQuery = "SELECT * FROM states WHERE name=%(name)s ORDER BY states.id"
-    cr.execute(myQuery, {'name': sys.argv[4]})
-    res = cr.fetchall()
-    for rows in res:
-        print(rows)
-    cr.close()
-    db.close()
+    cursor.execute(
+        "SELECT * FROM states WHERE name LIKE \
+                    BINARY %(name)s ORDER BY states.id ASC", {'name': argv[4]})
+    rows = cursor.fetchall()
+
+    for row in rows:
+        print(row)

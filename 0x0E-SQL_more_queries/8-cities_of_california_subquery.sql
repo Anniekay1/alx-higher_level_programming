@@ -1,7 +1,9 @@
--- Script that lists all the cities of California registered in the database
-SELECT id, name -- Query to list all the cities from California
-FROM cities
-WHERE state_id = ( -- Query to get the id of California
-      SELECT id
-      FROM states
-      WHERE name = "California");
+-- Lists all Californian cities in the database hbtn_0d_usa.
+-- having the output sorted in ascending order by cities.id.
+SELECT `id`, `name`
+  FROM `cities`
+ WHERE `state_id` IN
+       (SELECT `id`
+	  FROM `states`
+	 WHERE `name` = "California")
+ ORDER BY `id`;

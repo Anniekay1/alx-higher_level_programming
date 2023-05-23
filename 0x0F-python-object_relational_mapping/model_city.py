@@ -1,13 +1,23 @@
 #!/usr/bin/python3
-"""Module that containes the class definition of City and instance Base"""
-from model_state import Base
+"""
+This script defines a City class
+to work with MySQLAlchemy ORM.
+"""
+from model_state import Base, State
 from sqlalchemy import Column, Integer, String, ForeignKey
 
 
 class City(Base):
-    """City class that inherits from Base"""
+    """class `City`, a sub-class of Base.
+    Attributes:
+        __tablename__ (str): The city's table name
+        id (int): The city's id
+        name (str): The city's name
+        state_id (int): The state where the city is found
+    """
+
     __tablename__ = 'cities'
-    id = Column(Integer, autoincrement=True, unique=True,
-                nullable=False, primary_key=True)
+
+    id = Column(Integer, primary_key=True)
+    state_id = Column(Integer, ForeignKey('states.id'), nullable=False)
     name = Column(String(128), nullable=False)
-    state_id = Column(Integer, ForeignKey("states.id"), nullable=False)
